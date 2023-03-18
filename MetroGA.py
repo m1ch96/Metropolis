@@ -7,6 +7,8 @@ import os
 import sys
 import csv
 
+
+#ststs
 #Lo spazio è lineare!(Sums and difference of vectors and multiplication of a vector by a real number are defined) perchè le euqazioni sono tutte definite nello spazio euclideo!!!!!!
 #the general problem of calculate the posterion density probability is: pag 32
 #the general problem of calculate the posterion density probability for a inverse problem is: pag 34, two cases for the likelihood: probabilistic forward model (34) and functional forward model (35)
@@ -106,10 +108,10 @@ def ForwardModel(samples3,devstd,t,hoP,hoC,hoSc,yP, yC, ySc,mud):
 
     return gm
 
-    
+
 
 def FindNewStartingPoint(Prob3,samples3):
- 
+
     MaxProb3 = max(Prob3)
     for i in range(len(Prob3)):
         if Prob3[i] == MaxProb3:
@@ -211,24 +213,19 @@ x = np.array([0.01739949, 0.60231223, 0.00259897, 0.6211021,  0.00836138, 0.9183
 #[0.01739949, 0.60231223, 0.00259897, 0.6211021,  0.00836138, 0.91836421]) #sin water 0.0011
 
 #Prior Model
-sxx=0.005 
-syy=0.05  
-szz=0.005 
-smm=0.05  
-snn=0.005 
-soo=0.05 
+
 #Vsh CLAy,Rh clay, vsh snady clay, rh sandy clay, vox peat, rh peat
 mum = np.array([0.02,0.6,0.02,0.6,0.01,0.9])
-devstm= np.array([sxx,syy,szz,smm,snn,soo])
+devstm= np.array([0.005,0.05,0.005,0.05,0.005,0.05])
 #Sampling a normal distribution for calculate the covariance mantrix on prior parameteres
 Ncm = 200 # number of samples to generate
-# generate N samples from the normal distribution
+#generate N samples from the normal distribution
 samplesm= np.zeros((Ncm,len(mum)))
-for i in range(len(mum)):    
+for i in range(len(mum)):
     samplesm[:,i] = np.random.normal(mum[i], devstm[i], Ncm)
 covm = np.cov(samplesm.T)
 
-    
+
 #Data
 s1 = 0.01 
 s2 = 0.005 
