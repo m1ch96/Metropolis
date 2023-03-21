@@ -125,11 +125,10 @@ def FindNewStartingPoint(Prob3,samples3):
 
 def SaveOutput(samples3, gm2, Prob3):
 
-    # Define the filename for the CSV file
-    ArrayId=os.environ['SLURM_ARRAY_TASK_ID'] + "_" + sys.argv[1] + "_"    
-    filenameProb3 = "/storage/10GE_nfs/all/ada-scratch/michele.proietto/MetroGaOutput/" +  ArrayId + "Prob3.csv"
-    filenameGm2 = "/storage/10GE_nfs/all/ada-scratch/michele.proietto/MetroGaOutput/" + ArrayId + "Forward.csv"
-    filenameSamples = "/storage/10GE_nfs/all/ada-scratch/michele.proietto/MetroGaOutput/" + ArrayId + "Samples.csv"
+    # Define the filename for the CSV file 
+    filenameProb3 = "Prob3.csv"
+    filenameGm2 = "Forward.csv"
+    filenameSamples = "Samples.csv"
    
     # Write the Forward to the CSV file
     with open(filenameGm2, 'w', newline='') as csvfile:
@@ -149,7 +148,7 @@ def SaveOutput(samples3, gm2, Prob3):
          csvwriter.writerow(Prob3)
          
          
-def Plot(gm,t,yP,yC,ySc,mud,samples3,Prob3):
+def Plot(gm,t,yP,yC,ySc,mud,devstd,samples3,Prob3):
                 
     plt.figure(1)
     plt.title("Forward model posterior vs data")
@@ -185,7 +184,8 @@ def Plot(gm,t,yP,yC,ySc,mud,samples3,Prob3):
 #=======================================================================================
 #=======================================================================================
 
-
+def main():
+    
 
 #==========================================================
 #==Sampling Posterior Density probability(metropolis3)===== 
@@ -195,18 +195,18 @@ def Plot(gm,t,yP,yC,ySc,mud,samples3,Prob3):
 # diagonal covariance matrice neglet informations and indipedence of sampling
 
 #Time
-t = np.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
+    t = np.array([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
 
 #Parameter of Forward model
-hoP = 0.7
-hoC = 0.8
-hoSc = 3
+    hoP = 0.7
+    hoC = 0.8
+    hoSc = 3
 
 #Parameters of metropolis
-N3 = 6
-num_steps3 = 666
-delta3 = 0.0011
-x = np.array([0.01739949, 0.60231223, 0.00259897, 0.6211021,  0.00836138, 0.91836421])
+    N3 = 6
+    num_steps3 = 666
+    delta3 = 0.0011
+    x = np.array([0.01739949, 0.60231223, 0.00259897, 0.6211021,  0.00836138, 0.91836421])
 
 #[0.0188013,  0.5958105,  0.00245935, 0.59172465, 0.01059123, 0.90085271]) linear water 0.0011
 #[0.02,0.6,0.02,0.6,0.01,0.9]) #Starting point)
@@ -215,48 +215,48 @@ x = np.array([0.01739949, 0.60231223, 0.00259897, 0.6211021,  0.00836138, 0.9183
 #Prior Model
 
 #Vsh CLAy,Rh clay, vsh snady clay, rh sandy clay, vox peat, rh peat
-mum = np.array([0.02,0.6,0.02,0.6,0.01,0.9])
-devstm= np.array([0.005,0.05,0.005,0.05,0.005,0.05])
-#Sampling a normal distribution for calculate the covariance mantrix on prior parameteres
-Ncm = 200 # number of samples to generate
+    mum = np.array([0.02,0.6,0.02,0.6,0.01,0.9])
+    devstm= np.array([0.005,0.05,0.005,0.05,0.005,0.05])
+    #Sampling a normal distribution for calculate the covariance mantrix on prior parameteres
+    Ncm = 200 # number of samples to generate
 #generate N samples from the normal distribution
-samplesm= np.zeros((Ncm,len(mum)))
-for i in range(len(mum)):
-    samplesm[:,i] = np.random.normal(mum[i], devstm[i], Ncm)
-covm = np.cov(samplesm.T)
+    samplesm= np.zeros((Ncm,len(mum)))
+    for i in range(len(mum)):
+        samplesm[:,i] = np.random.normal(mum[i], devstm[i], Ncm)
+    covm = np.cov(samplesm.T)
 
 
 #Data
-s1 = 0.01 
-s2 = 0.005 
-s3 = 0.01 
-s4 = 0.01 
-s5 = 0.01 
-s6 = 0.005 
-s7 = 0.01 
-s8 = 0.01 
-s9 = 0.01 
-s10 = 0.005
-s11 = 0.01 
-s12 = 0.01 
-s13 = 0.005 
-s14 = 0.01 
-s15 = 0.005 
-s16 = 0.01 
-s17 = 0.01 
-s18 = 0.005 
-s19 = 0.01 
-s20 = 0.005
-s21 = 0.01 
-mud = np.array([0,0.003,0.001,0.006,0.004,0.008,0.007,0.01,0.008,0.014,0.009,0.018,0.012,0.020,0.015,0.023,0.017,0.025,0.018,0.028,0.020])  
-devstd=np.array([s1,s1,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21])  
+    s1 = 0.01 
+    s2 = 0.005 
+    s3 = 0.01 
+    s4 = 0.01 
+    s5 = 0.01 
+    s6 = 0.005 
+    s7 = 0.01 
+    s8 = 0.01 
+    s9 = 0.01 
+    s10 = 0.005
+    s11 = 0.01 
+    s12 = 0.01 
+    s13 = 0.005 
+    s14 = 0.01 
+    s15 = 0.005 
+    s16 = 0.01 
+    s17 = 0.01 
+    s18 = 0.005 
+    s19 = 0.01 
+    s20 = 0.005
+    s21 = 0.01 
+    mud = np.array([0,0.003,0.001,0.006,0.004,0.008,0.007,0.01,0.008,0.014,0.009,0.018,0.012,0.020,0.015,0.023,0.017,0.025,0.018,0.028,0.020])  
+    devstd=np.array([s1,s1,s3,s4,s5,s6,s7,s8,s9,s10,s11,s12,s13,s14,s15,s16,s17,s18,s19,s20,s21])  
  #Sampling a normal distribution for calculate the covariance mantrix on prior parameteres
-Ncd = 200 # number of samples to generate
+    Ncd = 200 # number of samples to generate
 # generate N samples from the normal distribution
-samplesd= np.zeros((Ncd,len(mud)))
-for i in range(len(mud)):    
-    samplesd[:,i] = np.random.normal(mud[i], devstd[i], Ncd)
-covd = np.cov(samplesd.T)
+    samplesd= np.zeros((Ncd,len(mud)))
+    for i in range(len(mud)):    
+        samplesd[:,i] = np.random.normal(mud[i], devstd[i], Ncd)
+    covd = np.cov(samplesd.T)
 
 
  
@@ -269,61 +269,62 @@ covd = np.cov(samplesd.T)
    
 #Linear trend for hwet:
 #h wet Sandy clay
-hwSc=np.array([2.5,1])
-tfitSc=np.array([0,20])
-B = np.stack([tfitSc, np.ones(len(tfitSc))]).T
-mSc, cSc = np.linalg.lstsq(B, hwSc, rcond=None)[0]
+    hwSc=np.array([2.5,1])
+    tfitSc=np.array([0,20])
+    B = np.stack([tfitSc, np.ones(len(tfitSc))]).T
+    mSc, cSc = np.linalg.lstsq(B, hwSc, rcond=None)[0]
 
 #h wet Peat
-hwP=np.array([0.7,0.7])
-tfitP=np.array([0,20]) 
-C = np.stack([tfitP, np.ones(len(tfitP))]).T
-mP, cP = np.linalg.lstsq(C, hwP, rcond=None)[0]
+    hwP=np.array([0.7,0.7])
+    tfitP=np.array([0,20]) 
+    C = np.stack([tfitP, np.ones(len(tfitP))]).T
+    mP, cP = np.linalg.lstsq(C, hwP, rcond=None)[0]
 
 #h wet clay
-hwC=np.array([0.8,0.8])
-tfitC=np.array([0,20])
-A = np.stack([tfitC, np.ones(len(tfitC))]).T
-mC, cC = np.linalg.lstsq(A, hwC, rcond=None)[0]
+    hwC=np.array([0.8,0.8])
+    tfitC=np.array([0,20])
+    A = np.stack([tfitC, np.ones(len(tfitC))]).T
+    mC, cC = np.linalg.lstsq(A, hwC, rcond=None)[0]
 
-yC = mC*t + cC
+    yC = mC*t + cC
 #ySc = mSc*t + cSc
-yP = mP*t + cP
+    yP = mP*t + cP
 
 #Sin trend for hwet:
 #h wet Sandy clay
-ySc=mSc * t +cSc + 0.2 * np.sin(t-np.pi)
+    ySc=mSc * t +cSc + 0.2 * np.sin(t-np.pi)
 
 
 #Calling metropolis3
-samples3,Prob3 = metropolis3(N3, num_steps3, delta3, mum, covm, mud, covd, x,t, hoP, hoC, hoSc, yP, yC, ySc)
+    samples3,Prob3 = metropolis3(N3, num_steps3, delta3, mum, covm, mud, covd, x,t, hoP, hoC, hoSc, yP, yC, ySc)
 
 
 
 #==========================================================
 #==============Only Forward model========================== 
 #==========================================================
-gm = ForwardModel(samples3,devstd,t,hoP,hoC,hoSc,yP, yC, ySc,mud)
+    gm = ForwardModel(samples3,devstd,t,hoP,hoC,hoSc,yP, yC, ySc,mud)
 
 
 #====================================================
 #===========NewStartingPoint=========================
 #====================================================
-NewStartingPoint = FindNewStartingPoint(Prob3,samples3)
+    NewStartingPoint = FindNewStartingPoint(Prob3,samples3)
 
 #====================================================
 #============Save in csv=============================
 #====================================================
-SaveOutput(samples3, gm, Prob3)
+    SaveOutput(samples3, gm, Prob3)
 
 #====================================================
 #==================Plot==============================
 #====================================================
-#Plot(gm,t,yP,yC,ySc,mud,samples3,Prob3)
+    Plot(gm,t,yP,yC,ySc,mud,devstd,samples3,Prob3)
 
 
 
-
+if __name__ == "__main__":
+    main()
 
 
 
